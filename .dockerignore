@@ -1,0 +1,44 @@
+# VCS / CI
+.git/
+.github/
+.gitignore
+.gitattributes
+
+# Secrets & local session cookies (mount at runtime instead)
+strava-cookies.json
+**/strava-cookies.json
+*.pem
+*.key
+.env
+.env.*
+
+# Local / IDE
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Build artefacts & binaries
+strava-heatmap-proxy
+strava-heatmap-proxy.exe
+*.exe
+*.test
+*.out
+build/
+dist/
+bin/
+
+# Browser extension & docs (not needed to build the Go proxy)
+strava-cookie-exporter/
+strava-cookie-exporter.zip
+*.md
+LICENSE
+Makefile
+strava-heatmap-proxy.service
+docker-compose.yml
+.dockerignore
+Dockerfile
