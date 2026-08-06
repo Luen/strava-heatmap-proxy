@@ -22,3 +22,8 @@ build/
 TODO
 strava-cookie-exporter.zip
 strava-heatmap-proxy
+strava-cookies.json
+
+# IDE
+.vscode/
+.idea/

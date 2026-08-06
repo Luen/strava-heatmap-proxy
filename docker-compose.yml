@@ -1,9 +1,11 @@
 services:
   strava-heatmap-proxy:
     build: .
+    image: strava-heatmap-proxy:local
     container_name: strava-heatmap-proxy
     ports:
       - "8080:8080"
+    # Session cookies stay on the host; never bake them into the image.
     volumes:
       - "${USERPROFILE}/.config/strava-heatmap-proxy:/config:ro"
     command: ["--port", "8080", "--cookies", "/config/strava-cookies.json", "--verbose"]
