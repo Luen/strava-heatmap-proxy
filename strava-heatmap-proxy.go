@@ -13,6 +13,7 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -158,6 +159,7 @@ func (c *StravaSessionClient) fetchCloudFrontCookies() error {
 	for _, cookie := range resp.Cookies() {
 		switch cookie.Name {
 		case "CloudFront-Signature", "CloudFront-Policy", "CloudFront-Key-Pair-Id", "_strava_idcf":
+			cookie.Domain = "" // Clear domain to allow sending to any subdomain
 			cookies = append(cookies, cookie)
 		case "_strava_CloudFront-Expires":
 			expiration, err = strconv.ParseInt(cookie.Value, 10, 64)
@@ -218,11 +220,23 @@ func main() {
 				log.Fatalf("Warning: Failed to fetch CloudFront cookies: %s", err)
 			}
 		}
+		// Manually construct Cookie header to bypass domain validation
+		// This ensures cookies are sent even if they have domain restrictions
+		var cookieParts []string
 		for _, c := range client.cloudFrontCookies {
-			req.AddCookie(c)
+			// Only add cookies with non-empty values
+			if c.Value != "" {
+				cookieParts = append(cookieParts, c.Name+"="+c.Value)
+			}
+		}
+		if len(cookieParts) > 0 {
+			// Replace the Cookie header entirely with our CloudFront cookies
+			// Don't append to existing cookies to avoid duplicates
+			req.Header.Set("Cookie", strings.Join(cookieParts, "; "))
 		}
 		if *param.Verbose {
-			log.Printf("Got request: %s", req.URL)
+			cookieHeader := req.Header.Get("Cookie")
+			log.Printf("Got request: %s (Cookies: %s)", req.URL, cookieHeader)
 		}
 	}
 

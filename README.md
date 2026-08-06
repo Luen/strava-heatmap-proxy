@@ -1,5 +1,7 @@
 # strava-heatmap-proxy
 
+`docker run -d -p 8080:8080 -v "$env:USERPROFILE\.config\strava-heatmap-proxy:/config:ro" docker.io/patrickziegler/strava-heatmap-proxy:latest`
+
 This software allows streaming high resolution [Strava Global Heatmap](https://www.strava.com/maps/global-heatmap) tiles with clients like [QGIS](https://qgis.org/de/site/), [QMapShack](https://github.com/Maproom/qmapshack/wiki), [JOSM](https://josm.openstreetmap.de/) and many others without requiring them to be able to handle the Strava specific authentication and session management.
 
 To do so, you need the following two pieces:
